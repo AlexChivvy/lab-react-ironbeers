@@ -1,52 +1,43 @@
 import React, { Component } from 'react';
 import './App.css';
-import allBeers from './components/allBeers.js'
-import BeerListItem from './components/allBeers.js'
-import axios from 'axios';
+import allBeers from './pages/allBeers.js'
+import randomBeer from './pages/randomBeer.js'
+import uniqueBeer from './pages/uniqueBeer.js'
 import { Link, Switch, Route } from 'react-router-dom';
 
 class App extends Component {
 
-    constructor(){
-        super()
-        this.state = {
-            beers: []
-        }
-    }
-
-    componentDidMount() {
-        axios.get("https://ih-beers-api2.herokuapp.com/beers")
-        .then(response => {
-            this.setState({beers: response.data})
-        })
-    }
-
-    getAllBeers(){
-
-    }
-
     render() {
         return (
             <div>
-                <Link to={'/allBeers'}>
+                <Link to={'/'}>
+                    <button>Home</button>
+                </Link>
+                
+                <Link to={'/all-beers'}>
                     <button>Get All Beers</button>
                 </Link>
 
+                <Link to={'/random-beer'}>
+                    <button>Random Beer</button>
+                </Link>
+
                 <Switch>
-                    <Route exact path="/allBeers" component={allBeers}/>
+                    <Route exact path="/all-beers" component={allBeers}/>
                 </Switch>
-                            
 
+                <Switch>
+                    <Route exact path="/random-beer" component={randomBeer}/>
+                </Switch>
 
-                <div id = "Beer-List">
-                    {this.state.beers.map(element => {
-                        return (<BeerListItem name={element.name} image={element.image_url} tagline={element.tagline} contributed_by={element.contributed_by} />);
-                    })}              
-                </div>
+                <Switch>
+                <Route exact path="/:id" component={uniqueBeer}/>
+                </Switch>
+                        
+                
             </div>
         );
     }
 }
 
 export default App;
-
