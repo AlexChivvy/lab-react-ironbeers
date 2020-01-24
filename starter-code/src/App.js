@@ -1,21 +1,52 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import allBeers from './components/allBeers.js'
+import BeerListItem from './components/allBeers.js'
+import axios from 'axios';
+import { Link, Switch, Route } from 'react-router-dom';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+
+    constructor(){
+        super()
+        this.state = {
+            beers: []
+        }
+    }
+
+    componentDidMount() {
+        axios.get("https://ih-beers-api2.herokuapp.com/beers")
+        .then(response => {
+            this.setState({beers: response.data})
+        })
+    }
+
+    getAllBeers(){
+
+    }
+
+    render() {
+        return (
+            <div>
+                <Link to={'/allBeers'}>
+                    <button>Get All Beers</button>
+                </Link>
+
+                <Switch>
+                    <Route exact path="/allBeers" component={allBeers}/>
+                </Switch>
+                            
+
+
+                <div id = "Beer-List">
+                    {this.state.beers.map(element => {
+                        return (<BeerListItem name={element.name} image={element.image_url} tagline={element.tagline} contributed_by={element.contributed_by} />);
+                    })}              
+                </div>
+            </div>
+        );
+    }
 }
 
 export default App;
+
